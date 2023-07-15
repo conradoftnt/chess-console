@@ -4,23 +4,41 @@ namespace xadrez_console
 {
     class Screen
     {
-        public static void ShowBoard(Board brd) 
+        public static void ShowBoard(Board board) 
         { 
-            for (int l = 0; l < brd.lines; l++)
+            for (int l = 0; l < board.lines; l++)
             {
-                for(int c = 0; c < brd.cloumns; c++) 
+                Console.Write(8 - l + " ");
+                for (int c = 0; c < board.columns; c++) 
                 {
-                    if (brd.Piece(l, c) == null)
+                    if (board.Piece(l, c) == null)
                     {
                         Console.Write("- ");
                     }
                     else
                     {
-                        Console.Write(brd.Piece(l, c) + " ");
+                        ShowPiece(board.Piece(l, c));
+                        Console.Write(" ");
                     }
                 }
                 Console.WriteLine();
-            }    
+            }
+            Console.WriteLine("  A B C D E F G H");
+        }
+
+        public static void ShowPiece(Piece piece)
+        {
+            if (piece.color == Color.White)
+            {
+                Console.Write(piece);
+            }
+            else
+            {
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(piece);
+                Console.ForegroundColor = aux;
+            }
         }
     }
 }
