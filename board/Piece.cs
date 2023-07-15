@@ -7,9 +7,9 @@
         public int amountMoves { get; set; }
         public Board board { get; set; }
 
-        public Piece(Position position, Color color, Board board)
+        public Piece(Color color, Board board)
         {
-            this.position = position;
+            this.position = null;
             this.color = color;
             this.board = board;
             this.amountMoves = 0;
