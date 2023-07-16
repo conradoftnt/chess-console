@@ -1,5 +1,5 @@
 ﻿using board;
-namespace xadrez
+namespace chess
 {
     class Tower : Piece
     {

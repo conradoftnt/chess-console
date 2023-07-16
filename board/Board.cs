@@ -13,12 +13,12 @@
             pieces = new Piece[lines, columns];
         }
 
-        public Piece Piece(int line, int column)
+        public Piece GetPiece(int line, int column)
         {
             return pieces[line, column];
         }
 
-        public Piece Piece(Position position) 
+        public Piece GetPiece(Position position) 
         {
             return pieces[position.line, position.column];
         }
@@ -31,6 +31,19 @@
             }
             pieces[position.line, position.column] = piece;
             piece.position = position;
+        }
+
+        public Piece RemovePiece(Position position)
+        {
+            if (!HasPiece(position))
+            {
+                return null;
+            }
+            Piece aux = GetPiece(position);
+            aux.position = null;
+            pieces[position.line, position.column] = null;
+            return aux;
+
         }
 
         public bool ValidPosition(Position position) 
@@ -53,7 +66,7 @@
         public bool HasPiece(Position position)
         {
             ValidatePosition(position);
-            return Piece(position) != null; 
+            return GetPiece(position) != null; 
         }
     }
 }

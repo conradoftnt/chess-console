@@ -1,13 +1,13 @@
 ﻿using board;
 
-namespace xadrez
+namespace chess
 {
-    class PositionXadrez
+    class ChessPosition
     {
         public int line { get; set; }
         public char column { get; set; }
 
-        public PositionXadrez(int line, char column)
+        public ChessPosition(char column, int line)
         {
             this.line = line;
             this.column = column;

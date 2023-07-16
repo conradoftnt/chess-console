@@ -1,6 +1,7 @@
 ﻿using board;
+using chess;
 
-namespace xadrez_console
+namespace chess_console
 {
     class Screen
     {
@@ -11,13 +12,13 @@ namespace xadrez_console
                 Console.Write(8 - l + " ");
                 for (int c = 0; c < board.columns; c++) 
                 {
-                    if (board.Piece(l, c) == null)
+                    if (board.GetPiece(l, c) == null)
                     {
                         Console.Write("- ");
                     }
                     else
                     {
-                        ShowPiece(board.Piece(l, c));
+                        ShowPiece(board.GetPiece(l, c));
                         Console.Write(" ");
                     }
                 }
@@ -39,6 +40,15 @@ namespace xadrez_console
                 Console.Write(piece);
                 Console.ForegroundColor = aux;
             }
+        }
+
+        public static ChessPosition ReadChessPosition()
+        {
+            string input = Console.ReadLine();
+            char cloumn = input[0];
+            int line = int.Parse(input[1].ToString());
+
+            return new ChessPosition(cloumn, line);
         }
     }
 }

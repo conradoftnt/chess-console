@@ -1,22 +1,40 @@
 ﻿using board;
-using xadrez;
+using chess;
 
-namespace xadrez_console
+namespace chess_console
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Board board = new Board(8, 8);
 
-            board.PutPiece(new Tower(Color.White, board), new Position(0,0));
-            board.PutPiece(new Tower(Color.Black, board), new Position(1, 3));
-            board.PutPiece(new King(Color.Black, board), new Position(2, 4));
+            try
+            {
+                ChessGame game = new ChessGame();
 
-            Screen.ShowBoard(board);
+                while (!game.finished)
+                {
+                    Console.Clear();
 
-            Console.ReadLine();
+                    Screen.ShowBoard(game.board);
 
+                    Console.Write("Origin: ");
+                    Position origin = Screen.ReadChessPosition().ToPosition();
+
+                    Console.Write("Destiny: ");
+                    Position destiny = Screen.ReadChessPosition().ToPosition();
+
+                    game.MakeAMove(origin, destiny);
+                }
+
+                Screen.ShowBoard(game.board);
+
+                Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
