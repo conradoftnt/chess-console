@@ -18,9 +18,17 @@ namespace chess_console
 
                     Screen.ShowBoard(game.board);
 
+                    Console.WriteLine();
                     Console.Write("Origin: ");
                     Position origin = Screen.ReadChessPosition().ToPosition();
 
+                    bool[,] possibleMoves = game.board.GetPiece(origin).PossibleMoves();
+
+                    Console.Clear();
+
+                    Screen.ShowBoard(game.board, possibleMoves);
+
+                    Console.WriteLine();
                     Console.Write("Destiny: ");
                     Position destiny = Screen.ReadChessPosition().ToPosition();
 

@@ -12,39 +12,68 @@ namespace chess_console
                 Console.Write(8 - l + " ");
                 for (int c = 0; c < board.columns; c++) 
                 {
-                    if (board.GetPiece(l, c) == null)
-                    {
-                        Console.Write("- ");
-                    }
-                    else
-                    {
-                        ShowPiece(board.GetPiece(l, c));
-                        Console.Write(" ");
-                    }
+                    ShowPiece(board.GetPiece(l, c));
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("  A B C D E F G H");
         }
 
+        public static void ShowBoard(Board board, bool[,] possibleMoves)
+        {
+            ConsoleColor originalBackground = Console.BackgroundColor;
+            ConsoleColor possibleField = ConsoleColor.DarkGray;
+            
+            for (int l = 0; l < board.lines; l++)
+            {
+                Console.Write(8 - l + " ");
+                for (int c = 0; c < board.columns; c++)
+                {
+                    if (possibleMoves[l,c])
+                    {
+                        Console.BackgroundColor = possibleField;
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = originalBackground;
+                    }
+
+                    ShowPiece(board.GetPiece(l, c));
+                    Console.BackgroundColor = originalBackground;
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  A B C D E F G H");
+
+            Console.BackgroundColor = originalBackground;
+        }
+
         public static void ShowPiece(Piece piece)
         {
-            if (piece.color == Color.White)
+            if (piece == null)
             {
-                Console.Write(piece);
+                Console.Write("- ");
             }
             else
             {
-                ConsoleColor aux = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(piece);
-                Console.ForegroundColor = aux;
+                if (piece.color == Color.White)
+                {
+                    Console.Write(piece);
+                }
+                else
+                {
+                    ConsoleColor aux = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(piece);
+                    Console.ForegroundColor = aux;
+                }
+                Console.Write(" ");
             }
         }
 
         public static ChessPosition ReadChessPosition()
         {
-            string input = Console.ReadLine();
+            string input = Console.ReadLine().ToLower();
             char cloumn = input[0];
             int line = int.Parse(input[1].ToString());
 

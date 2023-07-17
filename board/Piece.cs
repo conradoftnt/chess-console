@@ -1,6 +1,6 @@
 ﻿namespace board
 {
-    class Piece
+    abstract class Piece
     {
         public Position position { get; set; }
         public Color color { get; protected set; }
@@ -19,5 +19,14 @@
         {
             amountMoves++;
         }
+
+        protected bool CanMove(Position position)
+        {
+            Piece piece = board.GetPiece(position);
+
+            return piece == null || piece.color != color;
+        }
+
+        public abstract bool[,] PossibleMoves();
     }
 }

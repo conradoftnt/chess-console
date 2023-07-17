@@ -30,7 +30,19 @@ namespace chess
         private void ArrangePieces()
         {
             board.PutPiece(new Tower(Color.White, board), new ChessPosition('c', 1).ToPosition());
-            
+            board.PutPiece(new Tower(Color.White, board), new ChessPosition('c', 2).ToPosition());
+            board.PutPiece(new Tower(Color.White, board), new ChessPosition('d', 2).ToPosition());
+            board.PutPiece(new Tower(Color.White, board), new ChessPosition('e', 1).ToPosition());
+            board.PutPiece(new Tower(Color.White, board), new ChessPosition('e', 2).ToPosition());
+            board.PutPiece(new King(Color.White, board), new ChessPosition('d', 1).ToPosition());
+
+            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('c', 8).ToPosition());
+            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('c', 7).ToPosition());
+            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('d', 7).ToPosition());
+            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('e', 8).ToPosition());
+            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('e', 7).ToPosition());
+            board.PutPiece(new King(Color.Black, board), new ChessPosition('d', 8).ToPosition());
+
         }
     }
 }
