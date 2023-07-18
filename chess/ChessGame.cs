@@ -1,4 +1,5 @@
 ﻿using board;
+using System.Collections.Generic;
 
 namespace chess
 {
@@ -8,6 +9,8 @@ namespace chess
         public int turn { get; private set; }
         public Color currentPlayer { get; private set; }
         public bool finished { get; private set; }
+        private HashSet<Piece> pieces { get; set; }
+        private HashSet<Piece> capturedPieces { get; set; }
 
         public ChessGame()
         {
@@ -15,6 +18,8 @@ namespace chess
             turn = 1;
             currentPlayer = Color.White;
             finished = false;
+            pieces = new HashSet<Piece>();
+            capturedPieces = new HashSet<Piece>();
             ArrangePieces();
         }
 
@@ -25,6 +30,10 @@ namespace chess
             Piece capturedPiece = board.RemovePiece(destiny);
             board.PutPiece(piece, destiny);
 
+            if (capturedPiece != null)
+            {
+                capturedPieces.Add(capturedPiece);
+            }
         }
 
         public void TakeATurn(Position origin, Position destiny)
@@ -72,21 +81,58 @@ namespace chess
             }
         }
 
+        public HashSet<Piece> capturedPiecesByColor(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+
+            foreach (Piece piece in capturedPieces)
+            {
+                if (piece.color == color)
+                {
+                    aux.Add(piece);
+                }
+            }
+
+            return aux;
+        }
+
+        public HashSet<Piece> PiecesInGame(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+
+            foreach (Piece piece in pieces)
+            {
+                if (piece.color == color)
+                {
+                    aux.Add(piece);
+                }
+            }
+
+            aux.ExceptWith(capturedPiecesByColor(color));
+            return aux;
+        }
+
+        public void ArrangeNewPiece(char column, int line, Piece piece)
+        {
+            board.PutPiece(piece, new ChessPosition(column, line).ToPosition());
+            pieces.Add(piece);
+        }
+
         private void ArrangePieces()
         {
-            board.PutPiece(new Tower(Color.White, board), new ChessPosition('c', 1).ToPosition());
-            board.PutPiece(new Tower(Color.White, board), new ChessPosition('c', 2).ToPosition());
-            board.PutPiece(new Tower(Color.White, board), new ChessPosition('d', 2).ToPosition());
-            board.PutPiece(new Tower(Color.White, board), new ChessPosition('e', 1).ToPosition());
-            board.PutPiece(new Tower(Color.White, board), new ChessPosition('e', 2).ToPosition());
-            board.PutPiece(new King(Color.White, board), new ChessPosition('d', 1).ToPosition());
+            ArrangeNewPiece('c', 1, new Tower(Color.White, board));
+            ArrangeNewPiece('c', 2, new Tower(Color.White, board));
+            ArrangeNewPiece('d', 2, new Tower(Color.White, board));
+            ArrangeNewPiece('e', 1, new Tower(Color.White, board));
+            ArrangeNewPiece('e', 2, new Tower(Color.White, board));
+            ArrangeNewPiece('d', 1, new King(Color.White, board));
 
-            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('c', 8).ToPosition());
-            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('c', 7).ToPosition());
-            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('d', 7).ToPosition());
-            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('e', 8).ToPosition());
-            board.PutPiece(new Tower(Color.Black, board), new ChessPosition('e', 7).ToPosition());
-            board.PutPiece(new King(Color.Black, board), new ChessPosition('d', 8).ToPosition());
+            ArrangeNewPiece('c', 8, new Tower(Color.Black, board));
+            ArrangeNewPiece('c', 7, new Tower(Color.Black, board));
+            ArrangeNewPiece('d', 7, new Tower(Color.Black, board));
+            ArrangeNewPiece('e', 8, new Tower(Color.Black, board));
+            ArrangeNewPiece('e', 7, new Tower(Color.Black, board));
+            ArrangeNewPiece('d', 8, new King(Color.Black, board));
 
         }
     }

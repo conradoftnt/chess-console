@@ -19,24 +19,7 @@ namespace chess_console
                     {
                         Console.Clear();
 
-                        Screen.ShowBoard(game.board);
-                        Console.WriteLine();
-                        Console.WriteLine("Turn: " + game.turn);
-                        Console.Write("Waiting player: ");
-
-                        // Change the text color if current player is the black pieces
-                        if (game.currentPlayer == Color.Black)
-                        {
-                            ConsoleColor aux = Console.ForegroundColor;
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(game.currentPlayer);
-                            Console.ForegroundColor = aux;
-                        }
-                        else
-                        {
-                            Console.Write(game.currentPlayer);
-                        }
-                        Console.WriteLine();
+                        Screen.ShowGame(game);
 
                         Console.WriteLine();
                         Console.Write("Origin: ");

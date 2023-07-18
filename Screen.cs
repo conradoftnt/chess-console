@@ -1,10 +1,68 @@
 ﻿using board;
 using chess;
+using System.Net.NetworkInformation;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace chess_console
 {
     class Screen
     {
+        public static void ShowGame(ChessGame game)
+        {
+            ShowBoard(game.board);
+            Console.WriteLine();
+            ShowCapturedPieces(game);
+            Console.WriteLine();
+            Console.WriteLine("Turn: " + game.turn);
+            Console.Write("Waiting player: ");
+
+            // Change the text color if current player is the black pieces
+            if (game.currentPlayer == Color.Black)
+            {
+                WriteInBlack(game.currentPlayer.ToString());
+            }
+            else
+            {
+                Console.Write(game.currentPlayer);
+            }
+            Console.WriteLine();
+        }
+
+        public static void WriteInBlack(string text)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(text);
+            Console.ForegroundColor = aux;
+        }
+
+        public static void ShowCapturedPieces(ChessGame game)
+        {
+            Console.WriteLine("Captured Pieces: ");
+            Console.Write("Whites: ");
+            ShowSet(game.capturedPiecesByColor(Color.White));
+            WriteInBlack("Blacks: ");
+            ShowSet(game.capturedPiecesByColor(Color.Black));
+        }
+
+        public static void ShowSet(HashSet<Piece> pieces)
+        {
+            Console.Write("[");
+            foreach (Piece piece in pieces)
+            {
+                if (piece.color == Color.Black)
+                {
+                    WriteInBlack(piece.ToString());
+                }
+                else
+                {
+                    Console.Write(piece);
+                }
+                Console.Write(", ");
+            }
+            Console.WriteLine("]");
+        }
+
         public static void ShowBoard(Board board) 
         { 
             for (int l = 0; l < board.lines; l++)
@@ -16,7 +74,11 @@ namespace chess_console
                 }
                 Console.WriteLine();
             }
+            
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("  a b c d e f g h");
+            Console.ForegroundColor = aux;
         }
 
         public static void ShowBoard(Board board, bool[,] possibleMoves)
@@ -43,7 +105,10 @@ namespace chess_console
                 }
                 Console.WriteLine();
             }
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("  a b c d e f g h");
+            Console.ForegroundColor = aux;
 
             Console.BackgroundColor = originalBackground;
         }
@@ -62,10 +127,7 @@ namespace chess_console
                 }
                 else
                 {
-                    ConsoleColor aux = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(piece);
-                    Console.ForegroundColor = aux;
+                    WriteInBlack(piece.ToString());
                 }
                 Console.Write(" ");
             }
