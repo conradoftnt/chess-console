@@ -5,8 +5,8 @@ namespace chess
     class ChessGame
     {
         public Board board { get; private set; }
-        private int turn { get; set; }
-        private Color currentPlayer { get; set; }
+        public int turn { get; private set; }
+        public Color currentPlayer { get; private set; }
         public bool finished { get; private set; }
 
         public ChessGame()
@@ -25,6 +25,51 @@ namespace chess
             Piece capturedPiece = board.RemovePiece(destiny);
             board.PutPiece(piece, destiny);
 
+        }
+
+        public void TakeATurn(Position origin, Position destiny)
+        {
+            MakeAMove(origin, destiny);
+            turn++;
+            ChangePlayer();
+        }
+
+        public void ValidateOriginPosition(Position origin)
+        {
+            if (board.GetPiece(origin) == null)
+            {
+                throw new BoardException("There is no piece in the chosen position!");
+            }
+
+            if (board.GetPiece(origin).color != currentPlayer)
+            {
+                throw new BoardException("The chosen piece is not from the current player!");
+            }
+
+            if (!board.GetPiece(origin).IsUnblocked())
+            {
+                throw new BoardException("There are no possible moves for the chosen piece!");
+            }
+        }
+
+        public void ValidateDestinyPosition(Position origin, Position destiny)
+        {
+            if (!board.GetPiece(origin).IsAPossiblePosition(destiny))
+            {
+                throw new BoardException("There's not a possible destiny!");
+            }
+        }
+
+        private void ChangePlayer()
+        {
+            if (currentPlayer == Color.White)
+            {
+                currentPlayer = Color.Black;
+            }
+            else
+            {
+                currentPlayer = Color.White;
+            }
         }
 
         private void ArrangePieces()

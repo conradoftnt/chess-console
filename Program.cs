@@ -14,25 +14,53 @@ namespace chess_console
 
                 while (!game.finished)
                 {
-                    Console.Clear();
 
-                    Screen.ShowBoard(game.board);
+                    try
+                    {
+                        Console.Clear();
 
-                    Console.WriteLine();
-                    Console.Write("Origin: ");
-                    Position origin = Screen.ReadChessPosition().ToPosition();
+                        Screen.ShowBoard(game.board);
+                        Console.WriteLine();
+                        Console.WriteLine("Turn: " + game.turn);
+                        Console.Write("Waiting player: ");
 
-                    bool[,] possibleMoves = game.board.GetPiece(origin).PossibleMoves();
+                        // Change the text color if current player is the black pieces
+                        if (game.currentPlayer == Color.Black)
+                        {
+                            ConsoleColor aux = Console.ForegroundColor;
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write(game.currentPlayer);
+                            Console.ForegroundColor = aux;
+                        }
+                        else
+                        {
+                            Console.Write(game.currentPlayer);
+                        }
+                        Console.WriteLine();
 
-                    Console.Clear();
+                        Console.WriteLine();
+                        Console.Write("Origin: ");
+                        Position origin = Screen.ReadChessPosition().ToPosition();
+                        game.ValidateOriginPosition(origin);
 
-                    Screen.ShowBoard(game.board, possibleMoves);
+                        bool[,] possibleMoves = game.board.GetPiece(origin).PossibleMoves();
 
-                    Console.WriteLine();
-                    Console.Write("Destiny: ");
-                    Position destiny = Screen.ReadChessPosition().ToPosition();
+                        Console.Clear();
 
-                    game.MakeAMove(origin, destiny);
+                        Screen.ShowBoard(game.board, possibleMoves);
+
+                        Console.WriteLine();
+                        Console.Write("Destiny: ");
+                        Position destiny = Screen.ReadChessPosition().ToPosition();
+                        game.ValidateDestinyPosition(origin, destiny);
+
+                        game.TakeATurn(origin, destiny);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        Console.ReadLine();
+                    }
                 }
 
                 Screen.ShowBoard(game.board);
