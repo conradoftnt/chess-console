@@ -20,20 +20,16 @@
             amountMoves++;
         }
 
+        public void DecrementMove() { amountMoves--;}
+
         public bool IsUnblocked()
         {
             bool[,] possibleMoves = PossibleMoves();
 
             for (int l = 0; l < board.lines; l++)
-            {
                 for (int c = 0; c < board.columns; c++)
-                {
                     if (possibleMoves[l,c])
-                    {
                         return true;
-                    }
-                }
-            }
 
             return false;
         }

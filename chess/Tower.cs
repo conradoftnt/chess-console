@@ -24,9 +24,7 @@ namespace chess
             {
                 possibilities[positionToCheck.line, positionToCheck.column] = true;
                 if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
-                {
                     break;
-                }
 
                 positionToCheck.line -= 1;
             }
@@ -37,9 +35,7 @@ namespace chess
             {
                 possibilities[positionToCheck.line, positionToCheck.column] = true;
                 if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
-                {
                     break;
-                }
 
                 positionToCheck.column += 1;
             }
@@ -50,9 +46,7 @@ namespace chess
             {
                 possibilities[positionToCheck.line, positionToCheck.column] = true;
                 if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
-                {
                     break;
-                }
 
                 positionToCheck.line += 1;
             }
@@ -63,9 +57,7 @@ namespace chess
             {
                 possibilities[positionToCheck.line, positionToCheck.column] = true;
                 if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
-                {
                     break;
-                }
 
                 positionToCheck.column -= 1;
             }

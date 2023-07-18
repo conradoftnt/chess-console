@@ -18,14 +18,20 @@ namespace chess_console
 
             // Change the text color if current player is the black pieces
             if (game.currentPlayer == Color.Black)
-            {
                 WriteInBlack(game.currentPlayer.ToString());
-            }
             else
-            {
                 Console.Write(game.currentPlayer);
-            }
+
             Console.WriteLine();
+
+            if (game.check)
+            {
+                Console.WriteLine();
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("CHECK!");
+                Console.ForegroundColor = aux;
+            }
         }
 
         public static void WriteInBlack(string text)
@@ -51,13 +57,10 @@ namespace chess_console
             foreach (Piece piece in pieces)
             {
                 if (piece.color == Color.Black)
-                {
                     WriteInBlack(piece.ToString());
-                }
                 else
-                {
                     Console.Write(piece);
-                }
+
                 Console.Write(", ");
             }
             Console.WriteLine("]");
@@ -68,15 +71,15 @@ namespace chess_console
             for (int l = 0; l < board.lines; l++)
             {
                 Console.Write(8 - l + " ");
+
                 for (int c = 0; c < board.columns; c++) 
-                {
                     ShowPiece(board.GetPiece(l, c));
-                }
+
                 Console.WriteLine();
             }
             
             ConsoleColor aux = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("  a b c d e f g h");
             Console.ForegroundColor = aux;
         }
@@ -89,24 +92,22 @@ namespace chess_console
             for (int l = 0; l < board.lines; l++)
             {
                 Console.Write(8 - l + " ");
+
                 for (int c = 0; c < board.columns; c++)
                 {
                     if (possibleMoves[l,c])
-                    {
                         Console.BackgroundColor = possibleField;
-                    }
                     else
-                    {
                         Console.BackgroundColor = originalBackground;
-                    }
 
                     ShowPiece(board.GetPiece(l, c));
                     Console.BackgroundColor = originalBackground;
                 }
+
                 Console.WriteLine();
             }
             ConsoleColor aux = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("  a b c d e f g h");
             Console.ForegroundColor = aux;
 
@@ -116,19 +117,14 @@ namespace chess_console
         public static void ShowPiece(Piece piece)
         {
             if (piece == null)
-            {
                 Console.Write("- ");
-            }
             else
             {
                 if (piece.color == Color.White)
-                {
                     Console.Write(piece);
-                }
                 else
-                {
                     WriteInBlack(piece.ToString());
-                }
+
                 Console.Write(" ");
             }
         }

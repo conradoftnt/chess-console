@@ -39,7 +39,7 @@ namespace chess_console
 
                         game.TakeATurn(origin, destiny);
                     }
-                    catch (Exception ex)
+                    catch (BoardException ex)
                     {
                         Console.WriteLine(ex.Message);
                         Console.ReadLine();
