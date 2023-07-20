@@ -35,6 +35,24 @@ namespace chess
             if (capturedPiece != null)
                 CapturedPieces.Add(capturedPiece);
 
+            // Castling #specialmove
+            if (piece is King && destiny.Column == origin.Column + 2)
+            {
+                Position rookOrigin = new(origin.Line, origin.Column + 3);
+                Position rookDestiny = new(origin.Line, origin.Column + 1);
+                Piece rook = Board.RemovePiece(rookOrigin);
+                rook.IncrementMove();
+                Board.PutPiece(rook, rookDestiny);
+            }
+            if (piece is King && destiny.Column == origin.Column - 2)
+            {
+                Position rookOrigin = new(origin.Line, origin.Column - 4);
+                Position rookDestiny = new(origin.Line, origin.Column - 1);
+                Piece rook = Board.RemovePiece(rookOrigin);
+                rook.IncrementMove();
+                Board.PutPiece(rook, rookDestiny);
+            }
+
             return capturedPiece;
         }
 
@@ -50,6 +68,24 @@ namespace chess
             }
 
             Board.PutPiece(piece, origin);
+
+            // Castling #specialmove
+            if (piece is King && destiny.Column == origin.Column + 2)
+            {
+                Position rookOrigin = new(origin.Line, origin.Column + 3);
+                Position rookDestiny = new(origin.Line, origin.Column + 1);
+                Piece rook = Board.RemovePiece(rookDestiny);
+                rook.DecrementMove();
+                Board.PutPiece(rook, rookOrigin);
+            }
+            if (piece is King && destiny.Column == origin.Column - 2)
+            {
+                Position rookOrigin = new(origin.Line, origin.Column - 4);
+                Position rookDestiny = new(origin.Line, origin.Column - 1);
+                Piece rook = Board.RemovePiece(rookDestiny);
+                rook.DecrementMove();
+                Board.PutPiece(rook, rookOrigin);
+            }
         }
 
         public void TakeATurn(Position origin, Position destiny)
@@ -198,7 +234,7 @@ namespace chess
             ArrangeNewPiece('b', 1, new Knight(Color.White, Board));
             ArrangeNewPiece('c', 1, new Bishop(Color.White, Board));
             ArrangeNewPiece('d', 1, new Queen(Color.White, Board));
-            ArrangeNewPiece('e', 1, new King(Color.White, Board));
+            ArrangeNewPiece('e', 1, new King(Color.White, Board, this));
             ArrangeNewPiece('f', 1, new Bishop(Color.White, Board));
             ArrangeNewPiece('g', 1, new Knight(Color.White, Board));
             ArrangeNewPiece('h', 1, new Rook(Color.White, Board));
@@ -214,8 +250,8 @@ namespace chess
             ArrangeNewPiece('a', 8, new Rook(Color.Black, Board));
             ArrangeNewPiece('b', 8, new Knight(Color.Black, Board));
             ArrangeNewPiece('c', 8, new Bishop(Color.Black, Board));
-            ArrangeNewPiece('d', 8, new King(Color.Black, Board));
-            ArrangeNewPiece('e', 8, new Queen(Color.Black, Board));
+            ArrangeNewPiece('d', 8, new Queen(Color.Black, Board));
+            ArrangeNewPiece('e', 8, new King(Color.Black, Board, this));
             ArrangeNewPiece('f', 8, new Bishop(Color.Black, Board));
             ArrangeNewPiece('g', 8, new Knight(Color.Black, Board));
             ArrangeNewPiece('h', 8, new Rook(Color.Black, Board));
