@@ -12,6 +12,7 @@ namespace chess
         private HashSet<Piece> Pieces { get; set; }
         private HashSet<Piece> CapturedPieces { get; set; }
         public bool Check { get; private set; }
+        public Piece VulnerableEnPassant { get; private set; }
 
         public ChessGame()
         {
@@ -25,7 +26,7 @@ namespace chess
             ArrangePieces();
         }
 
-        public Piece MakeAMove(Position origin, Position destiny) 
+        public Piece MakeAMove(Position origin, Position destiny)
         {
             Piece piece = Board.RemovePiece(origin);
             piece.IncrementMove();
@@ -51,6 +52,18 @@ namespace chess
                 Piece rook = Board.RemovePiece(rookOrigin);
                 rook.IncrementMove();
                 Board.PutPiece(rook, rookDestiny);
+            }
+
+            // En Passant #specialmove
+            if ((piece is Pawn) && (origin.Column != destiny.Column && capturedPiece == null))
+            {
+                Position pawn;
+                if (piece.Color == Color.White)
+                    pawn = new(destiny.Line + 1, destiny.Column);
+                else
+                    pawn = new(destiny.Line - 1, destiny.Column);
+                capturedPiece = Board.RemovePiece(pawn);
+                CapturedPieces.Add(capturedPiece);
             }
 
             return capturedPiece;
@@ -86,6 +99,18 @@ namespace chess
                 rook.DecrementMove();
                 Board.PutPiece(rook, rookOrigin);
             }
+
+            // En Passant #specialmove
+            if ((piece is Pawn) && (origin.Column != destiny.Column && capturedPiece == VulnerableEnPassant))
+            {
+                Piece pawn = Board.RemovePiece(destiny);
+                Position pawnPosition;
+                if (piece.Color == Color.White)
+                    pawnPosition = new(3, destiny.Column);
+                else
+                    pawnPosition = new(4, destiny.Column);
+                Board.PutPiece(pawn, pawnPosition);
+            }
         }
 
         public void TakeATurn(Position origin, Position destiny)
@@ -99,8 +124,8 @@ namespace chess
             }
 
             if (IsInCheck(Opponent(CurrentPlayer)))
-                Check = true; 
-            else 
+                Check = true;
+            else
                 Check = false;
 
             if (IsInCheckmate(Opponent(CurrentPlayer)))
@@ -110,6 +135,14 @@ namespace chess
                 Turn++;
                 ChangePlayer();
             }
+
+            // En Passant #specialmove
+            Piece piece = Board.GetPiece(destiny);
+
+            if (piece is Pawn && (destiny.Line == origin.Line - 2 || destiny.Line == origin.Line + 2))
+                VulnerableEnPassant = piece;
+            else
+                VulnerableEnPassant = null;
         }
 
         public void ValidateOriginPosition(Position origin)
@@ -119,7 +152,7 @@ namespace chess
 
             if (Board.GetPiece(origin).Color != CurrentPlayer)
                 throw new BoardException("The chosen piece is not from the current player!");
-            
+
             if (!Board.GetPiece(origin).IsUnblocked())
                 throw new BoardException("There are no possible moves for the chosen piece!");
         }
@@ -140,7 +173,7 @@ namespace chess
 
         public HashSet<Piece> CapturedPiecesByColor(Color color)
         {
-            HashSet<Piece> aux = new ();
+            HashSet<Piece> aux = new();
 
             foreach (Piece piece in CapturedPieces)
             {
@@ -153,7 +186,7 @@ namespace chess
 
         public HashSet<Piece> PiecesInGame(Color color)
         {
-            HashSet<Piece> aux = new ();
+            HashSet<Piece> aux = new();
 
             foreach (Piece piece in Pieces)
             {
@@ -206,10 +239,10 @@ namespace chess
                 {
                     for (int c = 0; c < Board.Columns; c++)
                     {
-                        if (possibleMoves[l,c])
+                        if (possibleMoves[l, c])
                         {
                             Position origin = piece.Position;
-                            Position destiny = new (l, c);
+                            Position destiny = new(l, c);
                             Piece capturedPiece = MakeAMove(origin, destiny);
                             bool testCheck = IsInCheck(color);
                             UndoMove(origin, destiny, capturedPiece);
@@ -238,14 +271,14 @@ namespace chess
             ArrangeNewPiece('f', 1, new Bishop(Color.White, Board));
             ArrangeNewPiece('g', 1, new Knight(Color.White, Board));
             ArrangeNewPiece('h', 1, new Rook(Color.White, Board));
-            ArrangeNewPiece('a', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('b', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('c', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('d', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('e', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('f', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('g', 2, new Pawn(Color.White, Board));
-            ArrangeNewPiece('h', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('a', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('b', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('c', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('d', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('e', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('f', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('g', 2, new Pawn(Color.White, Board, this));
+            ArrangeNewPiece('h', 2, new Pawn(Color.White, Board, this));
 
             ArrangeNewPiece('a', 8, new Rook(Color.Black, Board));
             ArrangeNewPiece('b', 8, new Knight(Color.Black, Board));
@@ -255,14 +288,14 @@ namespace chess
             ArrangeNewPiece('f', 8, new Bishop(Color.Black, Board));
             ArrangeNewPiece('g', 8, new Knight(Color.Black, Board));
             ArrangeNewPiece('h', 8, new Rook(Color.Black, Board));
-            ArrangeNewPiece('a', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('b', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('c', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('d', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('e', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('f', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('g', 7, new Pawn(Color.Black, Board));
-            ArrangeNewPiece('h', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('a', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('b', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('c', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('d', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('e', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('f', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('g', 7, new Pawn(Color.Black, Board, this));
+            ArrangeNewPiece('h', 7, new Pawn(Color.Black, Board, this));
         }
     }
 }

@@ -3,8 +3,11 @@ namespace chess
 {
     class Pawn : Piece
     {
-        public Pawn(Color color, Board board) : base(color, board)
+        private ChessGame Game { get; set; }
+
+        public Pawn(Color color, Board board, ChessGame game) : base(color, board)
         {
+            Game = game;
         }
 
         public override string ToString()
@@ -51,6 +54,18 @@ namespace chess
                 positionToCheck.ChangePosition(Position.Line - 1, Position.Column + 1);
                 if (Board.ValidPosition(positionToCheck) && HaveEnemy(positionToCheck))
                     possibilities[positionToCheck.Line, positionToCheck.Column] = true;
+
+                // En Passant #specialmove
+                if (Position.Line == 3)
+                {
+                    Position left = new(Position.Line, Position.Column - 1);
+                    if (Board.ValidPosition(left) && HaveEnemy(left) && Board.GetPiece(left) == Game.VulnerableEnPassant)
+                        possibilities[left.Line - 1, left.Column] = true;
+                    
+                    Position right = new(Position.Line, Position.Column + 1);
+                    if (Board.ValidPosition(right) && HaveEnemy(right) && Board.GetPiece(right) == Game.VulnerableEnPassant)
+                        possibilities[right.Line - 1, right.Column] = true;
+                }
             }
 
             // Black
@@ -75,6 +90,18 @@ namespace chess
                 positionToCheck.ChangePosition(Position.Line + 1, Position.Column + 1);
                 if (Board.ValidPosition(positionToCheck) && HaveEnemy(positionToCheck))
                     possibilities[positionToCheck.Line, positionToCheck.Column] = true;
+
+                // En Passant #specialmove
+                if (Position.Line == 4)
+                {
+                    Position left = new(Position.Line, Position.Column - 1);
+                    if (Board.ValidPosition(left) && HaveEnemy(left) && Board.GetPiece(left) == Game.VulnerableEnPassant)
+                        possibilities[left.Line + 1, left.Column] = true;
+
+                    Position right = new(Position.Line, Position.Column + 1);
+                    if (Board.ValidPosition(right) && HaveEnemy(right) && Board.GetPiece(right) == Game.VulnerableEnPassant)
+                        possibilities[right.Line + 1, right.Column] = true;
+                }
             }
 
             return possibilities;
