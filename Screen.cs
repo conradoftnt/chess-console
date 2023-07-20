@@ -13,24 +13,39 @@ namespace chess_console
             Console.WriteLine();
             ShowCapturedPieces(game);
             Console.WriteLine();
-            Console.WriteLine("Turn: " + game.Turn);
-            Console.Write("Waiting player: ");
 
-            // Change the text color if current player is the black pieces
-            if (game.CurrentPlayer == Color.Black)
-                WriteInBlack(game.CurrentPlayer.ToString());
-            else
-                Console.Write(game.CurrentPlayer);
-
-            Console.WriteLine();
-
-            if (game.Check)
+            if (!game.Finished)
             {
+                Console.WriteLine("Turn: " + game.Turn);
+                Console.Write("Waiting player: ");
+
+                // Change the text color if current player is the black pieces
+                if (game.CurrentPlayer == Color.Black)
+                    WriteInBlack(game.CurrentPlayer.ToString());
+                else
+                    Console.Write(game.CurrentPlayer);
+
                 Console.WriteLine();
-                ConsoleColor aux = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("CHECK!");
-                Console.ForegroundColor = aux;
+
+                if (game.Check)
+                {
+                    Console.WriteLine();
+                    WriteInRed("CHECK!");
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                WriteInRed("CHECKMATE!");
+                Console.WriteLine();
+                WriteInYellow("Winner: ");
+
+                if (game.CurrentPlayer == Color.Black)
+                    WriteInBlack(game.CurrentPlayer.ToString());
+                else
+                    Console.Write(game.CurrentPlayer);
+
+                Console.WriteLine();
             }
         }
 
@@ -38,6 +53,22 @@ namespace chess_console
         {
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(text);
+            Console.ForegroundColor = aux;
+        }
+
+        public static void WriteInRed(string text)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(text);
+            Console.ForegroundColor = aux;
+        }
+
+        public static void WriteInYellow(string text)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write(text);
             Console.ForegroundColor = aux;
         }
@@ -77,11 +108,9 @@ namespace chess_console
 
                 Console.WriteLine();
             }
-            
-            ConsoleColor aux = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("  a b c d e f g h");
-            Console.ForegroundColor = aux;
+
+            WriteInYellow("  a b c d e f g h");
+            Console.WriteLine();
         }
 
         public static void ShowBoard(Board board, bool[,] possibleMoves)
@@ -106,10 +135,8 @@ namespace chess_console
 
                 Console.WriteLine();
             }
-            ConsoleColor aux = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("  a b c d e f g h");
-            Console.ForegroundColor = aux;
+            WriteInYellow("  a b c d e f g h");
+            Console.WriteLine();
 
             Console.BackgroundColor = originalBackground;
         }

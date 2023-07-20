@@ -67,8 +67,13 @@ namespace chess
             else 
                 Check = false;
 
-            Turn++;
-            ChangePlayer();
+            if (IsInCheckmate(Opponent(CurrentPlayer)))
+                Finished = true;
+            else
+            {
+                Turn++;
+                ChangePlayer();
+            }
         }
 
         public void ValidateOriginPosition(Position origin)
@@ -153,7 +158,33 @@ namespace chess
             return false;
         }
 
+        public bool IsInCheckmate(Color color)
+        {
+            if (!IsInCheck(color)) return false;
 
+            foreach (Piece piece in PiecesInGame(color))
+            {
+                bool[,] possibleMoves = piece.PossibleMoves();
+
+                for (int l = 0; l < Board.Lines; l++)
+                {
+                    for (int c = 0; c < Board.Columns; c++)
+                    {
+                        if (possibleMoves[l,c])
+                        {
+                            Position origin = piece.Position;
+                            Position destiny = new (l, c);
+                            Piece capturedPiece = MakeAMove(origin, destiny);
+                            bool testCheck = IsInCheck(color);
+                            UndoMove(origin, destiny, capturedPiece);
+
+                            if (!testCheck) return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 
         public void ArrangeNewPiece(char column, int line, Piece piece)
         {
@@ -164,18 +195,11 @@ namespace chess
         private void ArrangePieces()
         {
             ArrangeNewPiece('c', 1, new Tower(Color.White, Board));
-            ArrangeNewPiece('c', 2, new Tower(Color.White, Board));
-            ArrangeNewPiece('d', 2, new Tower(Color.White, Board));
-            ArrangeNewPiece('e', 1, new Tower(Color.White, Board));
-            ArrangeNewPiece('e', 2, new Tower(Color.White, Board));
+            ArrangeNewPiece('h', 7, new Tower(Color.White, Board));
             ArrangeNewPiece('d', 1, new King(Color.White, Board));
 
-            ArrangeNewPiece('c', 8, new Tower(Color.Black, Board));
-            ArrangeNewPiece('c', 7, new Tower(Color.Black, Board));
-            ArrangeNewPiece('d', 7, new Tower(Color.Black, Board));
-            ArrangeNewPiece('e', 8, new Tower(Color.Black, Board));
-            ArrangeNewPiece('e', 7, new Tower(Color.Black, Board));
-            ArrangeNewPiece('d', 8, new King(Color.Black, Board));
+            ArrangeNewPiece('a', 8, new King(Color.Black, Board));
+            ArrangeNewPiece('b', 8, new Tower(Color.Black, Board));
 
         }
     }

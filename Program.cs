@@ -45,10 +45,9 @@ namespace chess_console
                         Console.ReadLine();
                     }
                 }
-
-                Screen.ShowBoard(game.Board);
-
-                Console.ReadLine();
+                
+                Console.Clear();
+                Screen.ShowGame(game);
             }
             catch (Exception e)
             {

@@ -4,23 +4,23 @@
     {
         public int Lines { get; set; }
         public int Columns { get; set; }
-        private Piece[,] Pieces { get; set; }
+        private Piece[,] pieces;
 
         public Board(int lines, int columns)
         {
             this.Lines = lines;
             this.Columns = columns;
-            Pieces = new Piece[lines, columns];
+            pieces = new Piece[lines, columns];
         }
 
         public Piece GetPiece(int line, int column)
         {
-            return Pieces[line, column];
+            return pieces[line, column];
         }
 
         public Piece GetPiece(Position position) 
         {
-            return Pieces[position.Line, position.Column];
+            return pieces[position.Line, position.Column];
         }
 
         public void PutPiece(Piece piece, Position position)
@@ -29,7 +29,7 @@
             {
                 throw new BoardException("Already has a piece in that position!");
             }
-            Pieces[position.Line, position.Column] = piece;
+            pieces[position.Line, position.Column] = piece;
             piece.Position = position;
         }
 
@@ -41,7 +41,7 @@
             }
             Piece aux = GetPiece(position);
             aux.Position = null;
-            Pieces[position.Line, position.Column] = null;
+            pieces[position.Line, position.Column] = null;
             return aux;
 
         }
