@@ -14,52 +14,52 @@ namespace chess
 
         public override bool[,] PossibleMoves()
         {
-            bool[,] possibilities = new bool[board.lines, board.columns];
+            bool[,] possibilities = new bool[Board.Lines, Board.Columns];
 
-            Position positionToCheck = new Position(0, 0);
+            Position positionToCheck = new (0, 0);
 
             // N
-            positionToCheck.ChangePosition(position.line - 1, position.column);
-            while (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+            positionToCheck.ChangePosition(Position.Line - 1, Position.Column);
+            while (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
             {
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
-                if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
+                if (Board.GetPiece(positionToCheck) != null && Board.GetPiece(positionToCheck).Color != Color)
                     break;
 
-                positionToCheck.line -= 1;
+                positionToCheck.Line -= 1;
             }
 
             // E
-            positionToCheck.ChangePosition(position.line, position.column + 1);
-            while (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+            positionToCheck.ChangePosition(Position.Line, Position.Column + 1);
+            while (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
             {
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
-                if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
+                if (Board.GetPiece(positionToCheck) != null && Board.GetPiece(positionToCheck).Color != Color)
                     break;
 
-                positionToCheck.column += 1;
+                positionToCheck.Column += 1;
             }
 
             // S
-            positionToCheck.ChangePosition(position.line + 1, position.column);
-            while (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+            positionToCheck.ChangePosition(Position.Line + 1, Position.Column);
+            while (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
             {
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
-                if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
+                if (Board.GetPiece(positionToCheck) != null && Board.GetPiece(positionToCheck).Color != Color)
                     break;
 
-                positionToCheck.line += 1;
+                positionToCheck.Line += 1;
             }
 
             // W
-            positionToCheck.ChangePosition(position.line, position.column - 1);
-            while (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+            positionToCheck.ChangePosition(Position.Line, Position.Column - 1);
+            while (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
             {
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
-                if (board.GetPiece(positionToCheck) != null && board.GetPiece(positionToCheck).color != color)
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
+                if (Board.GetPiece(positionToCheck) != null && Board.GetPiece(positionToCheck).Color != Color)
                     break;
 
-                positionToCheck.column -= 1;
+                positionToCheck.Column -= 1;
             }
 
             return possibilities;

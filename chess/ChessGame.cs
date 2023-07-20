@@ -5,105 +5,105 @@ namespace chess
 {
     class ChessGame
     {
-        public Board board { get; private set; }
-        public int turn { get; private set; }
-        public Color currentPlayer { get; private set; }
-        public bool finished { get; private set; }
-        private HashSet<Piece> pieces { get; set; }
-        private HashSet<Piece> capturedPieces { get; set; }
-        public bool check { get; private set; }
+        public Board Board { get; private set; }
+        public int Turn { get; private set; }
+        public Color CurrentPlayer { get; private set; }
+        public bool Finished { get; private set; }
+        private HashSet<Piece> Pieces { get; set; }
+        private HashSet<Piece> CapturedPieces { get; set; }
+        public bool Check { get; private set; }
 
         public ChessGame()
         {
-            board = new Board(8, 8);
-            turn = 1;
-            currentPlayer = Color.White;
-            finished = false;
-            check = false;
-            pieces = new HashSet<Piece>();
-            capturedPieces = new HashSet<Piece>();
+            Board = new Board(8, 8);
+            Turn = 1;
+            CurrentPlayer = Color.White;
+            Finished = false;
+            Check = false;
+            Pieces = new HashSet<Piece>();
+            CapturedPieces = new HashSet<Piece>();
             ArrangePieces();
         }
 
         public Piece MakeAMove(Position origin, Position destiny) 
         {
-            Piece piece = board.RemovePiece(origin);
+            Piece piece = Board.RemovePiece(origin);
             piece.IncrementMove();
-            Piece capturedPiece = board.RemovePiece(destiny);
-            board.PutPiece(piece, destiny);
+            Piece capturedPiece = Board.RemovePiece(destiny);
+            Board.PutPiece(piece, destiny);
 
             if (capturedPiece != null)
-                capturedPieces.Add(capturedPiece);
+                CapturedPieces.Add(capturedPiece);
 
             return capturedPiece;
         }
 
         public void UndoMove(Position origin, Position destiny, Piece capturedPiece)
         {
-            Piece piece = board.RemovePiece(destiny);
+            Piece piece = Board.RemovePiece(destiny);
             piece.DecrementMove();
 
             if (capturedPiece != null)
             {
-                board.PutPiece(capturedPiece, destiny);
-                capturedPieces.Remove(capturedPiece);
+                Board.PutPiece(capturedPiece, destiny);
+                CapturedPieces.Remove(capturedPiece);
             }
 
-            board.PutPiece(piece, origin);
+            Board.PutPiece(piece, origin);
         }
 
         public void TakeATurn(Position origin, Position destiny)
         {
             Piece capturedPiece = MakeAMove(origin, destiny);
 
-            if (ItsCheck(currentPlayer))
+            if (IsInCheck(CurrentPlayer))
             {
                 UndoMove(origin, destiny, capturedPiece);
                 throw new BoardException("You can't put yourself in check!");
             }
 
-            if (ItsCheck(Opponent(currentPlayer)))
-                check = true; 
+            if (IsInCheck(Opponent(CurrentPlayer)))
+                Check = true; 
             else 
-                check = false;
+                Check = false;
 
-            turn++;
+            Turn++;
             ChangePlayer();
         }
 
         public void ValidateOriginPosition(Position origin)
         {
-            if (board.GetPiece(origin) == null)
+            if (Board.GetPiece(origin) == null)
                 throw new BoardException("There is no piece in the chosen position!");
 
-            if (board.GetPiece(origin).color != currentPlayer)
+            if (Board.GetPiece(origin).Color != CurrentPlayer)
                 throw new BoardException("The chosen piece is not from the current player!");
             
-            if (!board.GetPiece(origin).IsUnblocked())
+            if (!Board.GetPiece(origin).IsUnblocked())
                 throw new BoardException("There are no possible moves for the chosen piece!");
         }
 
         public void ValidateDestinyPosition(Position origin, Position destiny)
         {
-            if (!board.GetPiece(origin).IsAPossiblePosition(destiny))
+            if (!Board.GetPiece(origin).IsAPossiblePosition(destiny))
                 throw new BoardException("There's not a possible destiny!");
         }
 
         private void ChangePlayer()
         {
-            if (currentPlayer == Color.White)
-                currentPlayer = Color.Black;
+            if (CurrentPlayer == Color.White)
+                CurrentPlayer = Color.Black;
             else
-                currentPlayer = Color.White;
+                CurrentPlayer = Color.White;
         }
 
-        public HashSet<Piece> capturedPiecesByColor(Color color)
+        public HashSet<Piece> CapturedPiecesByColor(Color color)
         {
-            HashSet<Piece> aux = new HashSet<Piece>();
+            HashSet<Piece> aux = new ();
 
-            foreach (Piece piece in capturedPieces)
+            foreach (Piece piece in CapturedPieces)
             {
-                if (piece.color == color)
+                if (piece.Color == color)
                     aux.Add(piece);
             }
 
@@ -112,19 +112,19 @@ namespace chess
 
         public HashSet<Piece> PiecesInGame(Color color)
         {
-            HashSet<Piece> aux = new HashSet<Piece>();
+            HashSet<Piece> aux = new ();
 
-            foreach (Piece piece in pieces)
+            foreach (Piece piece in Pieces)
             {
-                if (piece.color == color)
+                if (piece.Color == color)
                     aux.Add(piece);
             }
 
-            aux.ExceptWith(capturedPiecesByColor(color));
+            aux.ExceptWith(CapturedPiecesByColor(color));
             return aux;
         }
 
-        private Color Opponent(Color color)
+        private static Color Opponent(Color color)
         {
             if (color == Color.White)
                 return Color.Black;
@@ -141,42 +141,41 @@ namespace chess
             return null;
         }
 
-        public bool ItsCheck(Color color)
+        public bool IsInCheck(Color color)
         {
-            Piece king = GetKing(color);
-            if (king == null)
-                throw new BoardException($"Has not a {color} king in game!");
-            
+            Piece king = GetKing(color) ?? throw new BoardException($"Has not a {color} king in game!");
             foreach (Piece piece in PiecesInGame(Opponent(color)))
             {
                 bool[,] possibleMoves = piece.PossibleMoves();
-                if (possibleMoves[king.position.line, king.position.column])
+                if (possibleMoves[king.Position.Line, king.Position.Column])
                     return true;
             }
             return false;
         }
 
+
+
         public void ArrangeNewPiece(char column, int line, Piece piece)
         {
-            board.PutPiece(piece, new ChessPosition(column, line).ToPosition());
-            pieces.Add(piece);
+            Board.PutPiece(piece, new ChessPosition(column, line).ToPosition());
+            Pieces.Add(piece);
         }
 
         private void ArrangePieces()
         {
-            ArrangeNewPiece('c', 1, new Tower(Color.White, board));
-            ArrangeNewPiece('c', 2, new Tower(Color.White, board));
-            ArrangeNewPiece('d', 2, new Tower(Color.White, board));
-            ArrangeNewPiece('e', 1, new Tower(Color.White, board));
-            ArrangeNewPiece('e', 2, new Tower(Color.White, board));
-            ArrangeNewPiece('d', 1, new King(Color.White, board));
+            ArrangeNewPiece('c', 1, new Tower(Color.White, Board));
+            ArrangeNewPiece('c', 2, new Tower(Color.White, Board));
+            ArrangeNewPiece('d', 2, new Tower(Color.White, Board));
+            ArrangeNewPiece('e', 1, new Tower(Color.White, Board));
+            ArrangeNewPiece('e', 2, new Tower(Color.White, Board));
+            ArrangeNewPiece('d', 1, new King(Color.White, Board));
 
-            ArrangeNewPiece('c', 8, new Tower(Color.Black, board));
-            ArrangeNewPiece('c', 7, new Tower(Color.Black, board));
-            ArrangeNewPiece('d', 7, new Tower(Color.Black, board));
-            ArrangeNewPiece('e', 8, new Tower(Color.Black, board));
-            ArrangeNewPiece('e', 7, new Tower(Color.Black, board));
-            ArrangeNewPiece('d', 8, new King(Color.Black, board));
+            ArrangeNewPiece('c', 8, new Tower(Color.Black, Board));
+            ArrangeNewPiece('c', 7, new Tower(Color.Black, Board));
+            ArrangeNewPiece('d', 7, new Tower(Color.Black, Board));
+            ArrangeNewPiece('e', 8, new Tower(Color.Black, Board));
+            ArrangeNewPiece('e', 7, new Tower(Color.Black, Board));
+            ArrangeNewPiece('d', 8, new King(Color.Black, Board));
 
         }
     }

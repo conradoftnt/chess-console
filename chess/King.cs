@@ -14,49 +14,49 @@ namespace chess
 
         public override bool[,] PossibleMoves()
         {
-            bool[,] possibilities = new bool[board.lines, board.columns];
+            bool[,] possibilities = new bool[Board.Lines, Board.Columns];
 
-            Position positionToCheck = new Position(0, 0);
+            Position positionToCheck = new (0, 0);
 
             // N
-            positionToCheck.ChangePosition(position.line - 1, position.column);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line - 1, Position.Column);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // NE
-            positionToCheck.ChangePosition(position.line - 1, position.column + 1);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line - 1, Position.Column + 1);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // E
-            positionToCheck.ChangePosition(position.line, position.column + 1);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line, Position.Column + 1);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // SE
-            positionToCheck.ChangePosition(position.line + 1, position.column + 1);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line + 1, Position.Column + 1);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // S
-            positionToCheck.ChangePosition(position.line + 1, position.column);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line + 1, Position.Column);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // SW
-            positionToCheck.ChangePosition(position.line + 1, position.column - 1);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line + 1, Position.Column - 1);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // W
-            positionToCheck.ChangePosition(position.line, position.column - 1);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line, Position.Column - 1);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             // NW
-            positionToCheck.ChangePosition(position.line - 1, position.column - 1);
-            if (board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
-                possibilities[positionToCheck.line, positionToCheck.column] = true;
+            positionToCheck.ChangePosition(Position.Line - 1, Position.Column - 1);
+            if (Board.ValidPosition(positionToCheck) && CanMove(positionToCheck))
+                possibilities[positionToCheck.Line, positionToCheck.Column] = true;
 
             return possibilities;
         }

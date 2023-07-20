@@ -2,32 +2,32 @@
 {
     abstract class Piece
     {
-        public Position position { get; set; }
-        public Color color { get; protected set; }
-        public int amountMoves { get; set; }
-        public Board board { get; set; }
+        public Position Position { get; set; }
+        public Color Color { get; protected set; }
+        public int AmountMoves { get; set; }
+        public Board Board { get; set; }
 
         public Piece(Color color, Board board)
         {
-            this.position = null;
-            this.color = color;
-            this.board = board;
-            this.amountMoves = 0;
+            this.Position = null;
+            this.Color = color;
+            this.Board = board;
+            this.AmountMoves = 0;
         }
 
         public void IncrementMove()
         {
-            amountMoves++;
+            AmountMoves++;
         }
 
-        public void DecrementMove() { amountMoves--;}
+        public void DecrementMove() { AmountMoves--;}
 
         public bool IsUnblocked()
         {
             bool[,] possibleMoves = PossibleMoves();
 
-            for (int l = 0; l < board.lines; l++)
-                for (int c = 0; c < board.columns; c++)
+            for (int l = 0; l < Board.Lines; l++)
+                for (int c = 0; c < Board.Columns; c++)
                     if (possibleMoves[l,c])
                         return true;
 
@@ -36,14 +36,14 @@
 
         protected bool CanMove(Position position)
         {
-            Piece piece = board.GetPiece(position);
+            Piece piece = Board.GetPiece(position);
 
-            return piece == null || piece.color != color;
+            return piece == null || piece.Color != Color;
         }
 
         public bool IsAPossiblePosition(Position position)
         {
-            return PossibleMoves()[position.line, position.column];
+            return PossibleMoves()[position.Line, position.Column];
         }
 
         public abstract bool[,] PossibleMoves();

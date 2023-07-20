@@ -2,25 +2,25 @@
 {
     class Board
     {
-        public int lines { get; set; }
-        public int columns { get; set; }
-        private Piece[,] pieces;
+        public int Lines { get; set; }
+        public int Columns { get; set; }
+        private Piece[,] Pieces { get; set; }
 
         public Board(int lines, int columns)
         {
-            this.lines = lines;
-            this.columns = columns;
-            pieces = new Piece[lines, columns];
+            this.Lines = lines;
+            this.Columns = columns;
+            Pieces = new Piece[lines, columns];
         }
 
         public Piece GetPiece(int line, int column)
         {
-            return pieces[line, column];
+            return Pieces[line, column];
         }
 
         public Piece GetPiece(Position position) 
         {
-            return pieces[position.line, position.column];
+            return Pieces[position.Line, position.Column];
         }
 
         public void PutPiece(Piece piece, Position position)
@@ -29,8 +29,8 @@
             {
                 throw new BoardException("Already has a piece in that position!");
             }
-            pieces[position.line, position.column] = piece;
-            piece.position = position;
+            Pieces[position.Line, position.Column] = piece;
+            piece.Position = position;
         }
 
         public Piece RemovePiece(Position position)
@@ -40,15 +40,15 @@
                 return null;
             }
             Piece aux = GetPiece(position);
-            aux.position = null;
-            pieces[position.line, position.column] = null;
+            aux.Position = null;
+            Pieces[position.Line, position.Column] = null;
             return aux;
 
         }
 
         public bool ValidPosition(Position position) 
         {
-            if (position.line < 0 || position.column < 0 || position.line >= lines || position.column >= columns)
+            if (position.Line < 0 || position.Column < 0 || position.Line >= Lines || position.Column >= Columns)
             {
                 return false;
             }

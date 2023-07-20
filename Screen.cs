@@ -9,22 +9,22 @@ namespace chess_console
     {
         public static void ShowGame(ChessGame game)
         {
-            ShowBoard(game.board);
+            ShowBoard(game.Board);
             Console.WriteLine();
             ShowCapturedPieces(game);
             Console.WriteLine();
-            Console.WriteLine("Turn: " + game.turn);
+            Console.WriteLine("Turn: " + game.Turn);
             Console.Write("Waiting player: ");
 
             // Change the text color if current player is the black pieces
-            if (game.currentPlayer == Color.Black)
-                WriteInBlack(game.currentPlayer.ToString());
+            if (game.CurrentPlayer == Color.Black)
+                WriteInBlack(game.CurrentPlayer.ToString());
             else
-                Console.Write(game.currentPlayer);
+                Console.Write(game.CurrentPlayer);
 
             Console.WriteLine();
 
-            if (game.check)
+            if (game.Check)
             {
                 Console.WriteLine();
                 ConsoleColor aux = Console.ForegroundColor;
@@ -46,9 +46,9 @@ namespace chess_console
         {
             Console.WriteLine("Captured Pieces: ");
             Console.Write("Whites: ");
-            ShowSet(game.capturedPiecesByColor(Color.White));
+            ShowSet(game.CapturedPiecesByColor(Color.White));
             WriteInBlack("Blacks: ");
-            ShowSet(game.capturedPiecesByColor(Color.Black));
+            ShowSet(game.CapturedPiecesByColor(Color.Black));
         }
 
         public static void ShowSet(HashSet<Piece> pieces)
@@ -56,7 +56,7 @@ namespace chess_console
             Console.Write("[");
             foreach (Piece piece in pieces)
             {
-                if (piece.color == Color.Black)
+                if (piece.Color == Color.Black)
                     WriteInBlack(piece.ToString());
                 else
                     Console.Write(piece);
@@ -68,11 +68,11 @@ namespace chess_console
 
         public static void ShowBoard(Board board) 
         { 
-            for (int l = 0; l < board.lines; l++)
+            for (int l = 0; l < board.Lines; l++)
             {
                 Console.Write(8 - l + " ");
 
-                for (int c = 0; c < board.columns; c++) 
+                for (int c = 0; c < board.Columns; c++) 
                     ShowPiece(board.GetPiece(l, c));
 
                 Console.WriteLine();
@@ -89,11 +89,11 @@ namespace chess_console
             ConsoleColor originalBackground = Console.BackgroundColor;
             ConsoleColor possibleField = ConsoleColor.DarkGray;
             
-            for (int l = 0; l < board.lines; l++)
+            for (int l = 0; l < board.Lines; l++)
             {
                 Console.Write(8 - l + " ");
 
-                for (int c = 0; c < board.columns; c++)
+                for (int c = 0; c < board.Columns; c++)
                 {
                     if (possibleMoves[l,c])
                         Console.BackgroundColor = possibleField;
@@ -120,7 +120,7 @@ namespace chess_console
                 Console.Write("- ");
             else
             {
-                if (piece.color == Color.White)
+                if (piece.Color == Color.White)
                     Console.Write(piece);
                 else
                     WriteInBlack(piece.ToString());

@@ -4,23 +4,23 @@ namespace chess
 {
     class ChessPosition
     {
-        public int line { get; set; }
-        public char column { get; set; }
+        public int Line { get; set; }
+        public char Column { get; set; }
 
         public ChessPosition(char column, int line)
         {
-            this.line = line;
-            this.column = column;
+            this.Line = line;
+            this.Column = column;
         }
 
         public Position ToPosition()
         {
-            return new Position(8 - line, column - 'a');
+            return new Position(8 - Line, Column - 'a');
         }
 
         public override string ToString()
         {
-            return $"{column}{line}";
+            return $"{Column}{Line}";
         }
     }
 }

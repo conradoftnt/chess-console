@@ -5,14 +5,14 @@ namespace chess_console
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
 
             try
             {
-                ChessGame game = new ChessGame();
+                ChessGame game = new ();
 
-                while (!game.finished)
+                while (!game.Finished)
                 {
 
                     try
@@ -26,11 +26,11 @@ namespace chess_console
                         Position origin = Screen.ReadChessPosition().ToPosition();
                         game.ValidateOriginPosition(origin);
 
-                        bool[,] possibleMoves = game.board.GetPiece(origin).PossibleMoves();
+                        bool[,] possibleMoves = game.Board.GetPiece(origin).PossibleMoves();
 
                         Console.Clear();
 
-                        Screen.ShowBoard(game.board, possibleMoves);
+                        Screen.ShowBoard(game.Board, possibleMoves);
 
                         Console.WriteLine();
                         Console.Write("Destiny: ");
@@ -46,7 +46,7 @@ namespace chess_console
                     }
                 }
 
-                Screen.ShowBoard(game.board);
+                Screen.ShowBoard(game.Board);
 
                 Console.ReadLine();
             }
