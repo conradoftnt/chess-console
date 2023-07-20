@@ -1,11 +1,10 @@
 ﻿using board;
 using chess;
-using System.Net.NetworkInformation;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace chess_console
 {
-    class Screen
+    partial class Screen
     {
         public static void ShowGame(ChessGame game)
         {
@@ -156,9 +155,17 @@ namespace chess_console
             }
         }
 
+        [GeneratedRegex("[a-h]{1}[1-8]{1}")]
+        private static partial Regex ValidInput();
+
         public static ChessPosition ReadChessPosition()
         {
             string input = Console.ReadLine().ToLower();
+
+            // Checking if is a valid input
+            if (!(input.Length == 2 && ValidInput().IsMatch(input)))
+                throw new InputException($"The input '{input}' is invalid!");
+
             char cloumn = input[0];
             int line = int.Parse(input[1].ToString());
 

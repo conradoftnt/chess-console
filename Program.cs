@@ -44,6 +44,11 @@ namespace chess_console
                         Console.WriteLine(ex.Message);
                         Console.ReadLine();
                     }
+                    catch (InputException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        Console.ReadLine();
+                    }
                 }
                 
                 Console.Clear();
@@ -51,6 +56,8 @@ namespace chess_console
             }
             catch (Exception e)
             {
+                Console.WriteLine();
+                Console.WriteLine(e.GetType());
                 Console.WriteLine(e.Message);
             }
         }
