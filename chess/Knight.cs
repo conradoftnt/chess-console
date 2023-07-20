@@ -9,7 +9,7 @@ namespace chess
 
         public override string ToString()
         {
-            return "K";
+            return "L";
         }
 
         public override bool[,] PossibleMoves()
