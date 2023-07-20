@@ -1,15 +1,15 @@
 ﻿using board;
 namespace chess
 {
-    class Horse : Piece
+    class Knight : Piece
     {
-        public Horse(Color color, Board board) : base(color, board)
+        public Knight(Color color, Board board) : base(color, board)
         {
         }
 
         public override string ToString()
         {
-            return "H";
+            return "K";
         }
 
         public override bool[,] PossibleMoves()
