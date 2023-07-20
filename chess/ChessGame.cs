@@ -194,13 +194,39 @@ namespace chess
 
         private void ArrangePieces()
         {
-            ArrangeNewPiece('c', 1, new Tower(Color.White, Board));
-            ArrangeNewPiece('h', 7, new Tower(Color.White, Board));
-            ArrangeNewPiece('d', 1, new King(Color.White, Board));
+            ArrangeNewPiece('a', 1, new Tower(Color.White, Board));
+            ArrangeNewPiece('b', 1, new Horse(Color.White, Board));
+            ArrangeNewPiece('c', 1, new Bishop(Color.White, Board));
+            ArrangeNewPiece('d', 1, new Queen(Color.White, Board));
+            ArrangeNewPiece('e', 1, new King(Color.White, Board));
+            ArrangeNewPiece('f', 1, new Bishop(Color.White, Board));
+            ArrangeNewPiece('g', 1, new Horse(Color.White, Board));
+            ArrangeNewPiece('h', 1, new Tower(Color.White, Board));
+            ArrangeNewPiece('a', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('b', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('c', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('d', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('e', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('f', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('g', 2, new Pawn(Color.White, Board));
+            ArrangeNewPiece('h', 2, new Pawn(Color.White, Board));
 
-            ArrangeNewPiece('a', 8, new King(Color.Black, Board));
-            ArrangeNewPiece('b', 8, new Tower(Color.Black, Board));
-
+            ArrangeNewPiece('a', 8, new Tower(Color.Black, Board));
+            ArrangeNewPiece('b', 8, new Horse(Color.Black, Board));
+            ArrangeNewPiece('c', 8, new Bishop(Color.Black, Board));
+            ArrangeNewPiece('d', 8, new King(Color.Black, Board));
+            ArrangeNewPiece('e', 8, new Queen(Color.Black, Board));
+            ArrangeNewPiece('f', 8, new Bishop(Color.Black, Board));
+            ArrangeNewPiece('g', 8, new Horse(Color.Black, Board));
+            ArrangeNewPiece('h', 8, new Tower(Color.Black, Board));
+            ArrangeNewPiece('a', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('b', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('c', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('d', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('e', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('f', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('g', 7, new Pawn(Color.Black, Board));
+            ArrangeNewPiece('h', 7, new Pawn(Color.Black, Board));
         }
     }
 }
