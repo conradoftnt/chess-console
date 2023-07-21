@@ -123,6 +123,22 @@ namespace chess
                 throw new BoardException("You can't put yourself in check!");
             }
 
+            Piece piece = Board.GetPiece(destiny);
+
+            // Promotion #specialmove
+            if (piece is Pawn)
+            {
+                if ((piece.Color == Color.White && destiny.Line == 0) || (piece.Color == Color.Black && destiny.Line == 7)) 
+                {
+                    piece = Board.RemovePiece(destiny);
+                    Pieces.Remove(piece);
+
+                    Piece queen = new Queen(piece.Color, Board);
+                    Board.PutPiece(queen, destiny);
+                    Pieces.Add(queen);
+                }
+            }
+
             if (IsInCheck(Opponent(CurrentPlayer)))
                 Check = true;
             else
@@ -137,8 +153,6 @@ namespace chess
             }
 
             // En Passant #specialmove
-            Piece piece = Board.GetPiece(destiny);
-
             if (piece is Pawn && (destiny.Line == origin.Line - 2 || destiny.Line == origin.Line + 2))
                 VulnerableEnPassant = piece;
             else

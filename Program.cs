@@ -41,12 +41,14 @@ namespace chess_console
                     }
                     catch (BoardException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine();
+                        Screen.WriteInRed(ex.Message);
                         Console.ReadLine();
                     }
                     catch (InputException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine();
+                        Screen.WriteInRed(ex.Message);
                         Console.ReadLine();
                     }
                 }
@@ -54,11 +56,11 @@ namespace chess_console
                 Console.Clear();
                 Screen.ShowGame(game);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 Console.WriteLine();
-                Console.WriteLine(e.GetType());
-                Console.WriteLine(e.Message);
+                Screen.WriteInRed(ex.Message);
+                Console.ReadLine();
             }
         }
     }
